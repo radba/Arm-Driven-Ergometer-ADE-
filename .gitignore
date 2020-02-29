@@ -1,4 +1,4 @@
-*.fig
+
 *.jpg
 *.png
 *.xml
@@ -6,3 +6,6 @@
 *.zba
 *.zbc
 *.zbi
+*.txt
+*~
+*/ddg_build
