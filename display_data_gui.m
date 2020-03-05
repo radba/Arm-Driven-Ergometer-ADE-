@@ -70,6 +70,38 @@ end
 
 
 
+     dataObj = importdata(fullpath);
+     
+     if(isstruct(dataObj))
+         
+         fields = fieldnames(dataObj.data);
+         handles.popupmenu1.String = fields;
+         handles.popupmenu1.Visible = 'on';
+         handles.table1.Data = getfield(dataObj.data,handles.popupmenu1.String{handles.popupmenu1.Value}); 
+         
+         cla;
+         axes(handles.axes4); 
+         colormap parula;
+        % imagesc(handles.table1.Data(:,2:end));grid on;alpha(0.7);colorbar;
+         imagesc(handles.table1.Data);grid on;alpha(0.7);colorbar;
+         
+     else
+         
+         cla;
+         axes(handles.axes4); 
+         colormap bone;
+         clims = [0,1];
+         imagesc(dataObj(:,2:end),clims);grid on;alpha(0.5);colorbar;
+         
+         handles.popupmenu1.String = 'None';
+         handles.popupmenu1.Visible = 'off';
+         handles.table1.Data = dataObj;
+         
+     end
+
+
+
+
 % Choose default command line output for display_data_gui
 handles.output = hObject;
 
@@ -110,10 +142,10 @@ dataObj = importdata(fullpath);
          
          cla;
          axes(handles.axes4); 
-         %colormap bone;
-         %clims = [0,1];
-         imagesc(dataObj.data.Munka1(:,2:end));grid on;alpha(0.7);
-         handles.table1.Data = dataObj.data;
+
+         handles.table1.Data = getfield(dataObj.data,handles.popupmenu1.String{handles.popupmenu1.Value});
+         %imagesc(handles.table1.Data(:,2:end));grid on;alpha(0.7);colorbar;
+         imagesc(handles.table1.Data);grid on;alpha(0.7);colorbar;
          
      else
          
@@ -121,7 +153,7 @@ dataObj = importdata(fullpath);
          axes(handles.axes4); 
          colormap bone;
          clims = [0,1];
-         imagesc(dataObj(:,2:end),clims);grid on;alpha(0.5);
+         imagesc(dataObj(:,2:end),clims);grid on;alpha(0.5);colorbar;
          handles.table1.Data = dataObj;
          
  
@@ -174,8 +206,9 @@ function ChooseFIleOushbutton_Callback(hObject, eventdata, handles)
          cla;
          axes(handles.axes4); 
          colormap parula;
+
          %clims = [0,1];
-         imagesc(dataObj.data.Munka1(:,2:end));grid on;alpha(0.7);
+         imagesc(dataObj.data.Munka1(:,2:end));grid on;alpha(0.7);colorbar;
          
          fields = fieldnames(dataObj.data);
          handles.popupmenu1.String = fields;
@@ -188,7 +221,7 @@ function ChooseFIleOushbutton_Callback(hObject, eventdata, handles)
          axes(handles.axes4); 
          colormap bone;
          clims = [0,1];
-         imagesc(dataObj(:,2:end),clims);grid on;alpha(0.5);
+         imagesc(dataObj(:,2:end),clims);grid on;alpha(0.5);colorbar;
          
          handles.popupmenu1.String = 'None';
          handles.popupmenu1.Visible = 'off';
@@ -213,7 +246,8 @@ colormap parula;
 %clims = [0,1];
 handles.table1.Data = getfield(dataObj.data,hObject.String{hObject.Value});
 
-imagesc(handles.table1.Data);grid on;alpha(0.7);
+imagesc(handles.table1.Data);grid on;alpha(0.7);colorbar;
+
 
 
 
