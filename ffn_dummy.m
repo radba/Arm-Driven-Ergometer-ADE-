@@ -1,3 +1,5 @@
+%% FFN
+
 clear all;
 close all;
 
@@ -49,72 +51,15 @@ end
 X = con2seq(RepSignal'); 
 T = con2seq(RepTarget1');
 
-%net = narxnet(1:20,1:2,10);
-net = narnet(1:20,10);
-[Xs,Xi,Ai,Ts] = preparets(net,{},{},T);
-net = train(net,Xs,Ts,Xi,Ai);
-%view(net);
-[Y,Xf,Af]= net(Xs,Xi,Ai);
-plotresponse(Ts,Y);
 
-clf;
+
+%net = feedforwardnet(50);
+%net = patternnet(10);
+net= fitnet(20,'trainlm');
+net = train(net,X,T);
+view(net)
+Y = net(X);
+perf = perform(net,Y,T);
 
 figure(1);
-plot(cell2mat(Ts));hold on;grid on;
-plot(cell2mat(Y));
-
-%Y2 = net(cel(:,21),cel(:,1:20),Ai);
-
-
-
-%%
-
-%fakeT = zeros(size(T));
-%fakeT = con2seq(fakeT);
-%sequence = [X;fakeT];
-sequence = X;
-
-prev_steps = sequence(:,1:20);
-Y2 = {};
-
-for i=21:400
-    
-    
-    y2 = net(sequence(:,i),prev_steps(:,1:20),Ai);
-    Y2 = [Y2,y2];
-    prev_steps(:,21) = sequence(:,i);
-    prev_steps = prev_steps(:,2:21);
-    
-    
-    
-end
-
-figure(3);
-plot(cell2mat(Y2));hold on;
-
-save('net.mat', 'net');
-
-
-%%
-
-perf = perform(net,Ts,Y);
-[netc,Xic,Aic] = closeloop(net,Xf,Af);
-%view(netc);
-
-prev_steps = sequence(1,1:20);
-Y2 = {};
-
-for i=21:400
-    
-    
-    y2 = netc(cell(0,20),prev_steps,Aic);
-    Y2 = [Y2,y2(1)];
-    prev_steps(21) = sequence(1,i);
-    prev_steps = prev_steps(2:21);
-    
-    
-    
-end
-
-figure(3);
-plot(cell2mat(Y2));hold on;
+plot(cell2mat(Y));hold on;plot(cell2mat(T));

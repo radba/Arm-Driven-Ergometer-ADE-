@@ -8,4 +8,5 @@
 *.zbi
 *.txt
 *~
+*.mat
 */ddg_build

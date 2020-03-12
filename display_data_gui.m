@@ -66,6 +66,16 @@ if isfile(strcat('.',filesep,'ddg_build',filesep,'last_dirpath.txt')) % TODO
      fullpath = fgetl(fid);
      handles.edit1.String = fullpath;
      
+     if(fullpath == -1)
+         
+        fullpath = strcat('.',filesep,'ddg_build',filesep,'last_dirpath.txt');
+         
+     end
+   
+else     
+     
+     fid = fopen(strcat('.',filesep,'ddg_build',filesep,'last_dirpath.txt'), 'wt' );
+     fullpath = strcat('.',filesep,'ddg_build',filesep,'last_dirpath.txt');
 end
 
 
@@ -74,16 +84,34 @@ end
      
      if(isstruct(dataObj))
          
-         fields = fieldnames(dataObj.data);
-         handles.popupmenu1.String = fields;
-         handles.popupmenu1.Visible = 'on';
-         handles.table1.Data = getfield(dataObj.data,handles.popupmenu1.String{handles.popupmenu1.Value}); 
+         if(isfield(dataObj.data,'Munka1'))
+           
+             fields = fieldnames(dataObj.data);
+             
+             handles.popupmenu1.String = fields;
+             handles.popupmenu1.Visible = 'on';
+             handles.table1.Data = getfield(dataObj.data,handles.popupmenu1.String{handles.popupmenu1.Value}); 
          
-         cla;
-         axes(handles.axes4); 
-         colormap parula;
-        % imagesc(handles.table1.Data(:,2:end));grid on;alpha(0.7);colorbar;
-         imagesc(handles.table1.Data);grid on;alpha(0.7);colorbar;
+             cla;
+             axes(handles.axes4); 
+             colormap parula;
+             % imagesc(handles.table1.Data(:,2:end));grid on;alpha(0.7);colorbar;
+             imagesc(handles.table1.Data);grid on;alpha(0.7);colorbar;
+             
+         elseif(isfield(dataObj,'data'))    
+                
+         
+                  cla;
+                  axes(handles.axes4);
+                  colormap bone;
+                  clims = [0,1];
+                  imagesc(dataObj.data(:,2:end),clims);grid on;alpha(0.5);colorbar;
+         
+                  handles.popupmenu1.String = 'None';
+                  handles.popupmenu1.Visible = 'off';
+                  handles.table1.Data = dataObj.data;
+         end
+
          
      else
          
@@ -203,17 +231,33 @@ function ChooseFIleOushbutton_Callback(hObject, eventdata, handles)
      
      if(isstruct(dataObj))
          
-         cla;
-         axes(handles.axes4); 
-         colormap parula;
+          if(isfield(dataObj.data,'Munka1'))
+              
+              cla;
+              axes(handles.axes4);
+              colormap parula;
 
-         %clims = [0,1];
-         imagesc(dataObj.data.Munka1(:,2:end));grid on;alpha(0.7);colorbar;
+              %clims = [0,1];
+              imagesc(dataObj.data.Munka1(:,2:end));grid on;alpha(0.7);colorbar;
          
-         fields = fieldnames(dataObj.data);
-         handles.popupmenu1.String = fields;
-         handles.popupmenu1.Visible = 'on';
-         handles.table1.Data = getfield(dataObj.data,handles.popupmenu1.String{handles.popupmenu1.Value}); 
+              fields = fieldnames(dataObj.data);
+              handles.popupmenu1.String = fields;
+              handles.popupmenu1.Visible = 'on';
+              handles.table1.Data = getfield(dataObj.data,handles.popupmenu1.String{handles.popupmenu1.Value});
+         
+          elseif(isfield(dataObj,'data'))
+         
+              cla;
+              axes(handles.axes4);
+              colormap bone;
+              clims = [0,1];
+              imagesc(dataObj.data(:,2:end),clims);grid on;alpha(0.5);colorbar;
+         
+              handles.popupmenu1.String = 'None';
+              handles.popupmenu1.Visible = 'off';
+              handles.table1.Data = dataObj.data;
+         
+          end
          
      else
          
